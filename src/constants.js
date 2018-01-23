@@ -1,0 +1,1 @@
+module.exports.SERVER = 'http://144.122.178.20:3000';

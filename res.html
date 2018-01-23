@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<style>
+		h3 {
+			display: inline-block;
+		}
+	</style>
+</head>
+<body>
+	<h3>Name: </h3>
+	<input id="name" type="text" />
+	<br />
+	<h3>Type (book, video, lesson): </h3>
+	<input id="type" type="text" />
+	<br />
+	<h3>Link: </h3>
+	<input id="link" type="text" />
+	<br />
+	<h3>Price: </h3>
+	<input id="price" type="text" />
+	<br />
+	<h3>Duration (in hours): </h3>
+	<input id="duration" type="text" />
+	<br />
+	<h3>StartTopic: </h3>
+	<input id="start-topic" type="text" />
+	<br />
+	<h3>EndTopic: </h3>
+	<input id="end-topic" type="text" />
+	<br />
+	<h3>Any Requirements (seperated with comma, topic names): </h3>
+	<input id="any-requirements" type="text" />
+	<br />
+	<h3>This Requirements (seperated with comma, topic names): </h3>
+	<input id="this-requirements" type="text" />
+	<br />
+	<h3>Content (seperated with comma, topic names): </h3>
+	<input id="content" type="text" />
+	<br />
+	<h3>Pratic - Teoric Ratio (-5 => so teoric, 5 => so pratic): </h3>
+	<input id="ptr" type="text" />
+	<br />
+	<button id="submit">Save This To Database</button>
+	<br />
+	<br />
+
+	<button id="convert">Convert To Json Data</button>
+	<br />
+	<div id="result"></div>
+
+	<script>
+		$(function() {
+			var mainData = [];
+			var $name             = $("#name");
+			var $type             = $("#type");
+			var $link             = $("#link");
+			var $price            = $("#price");
+			var $duration         = $("#duration");
+			var $startTopic       = $("#start-topic");
+			var $endTopic         = $("#end-topic");
+			var $anyRequirements  = $("#any-requirements");
+			var $thisRequirements = $("#this-requirements");
+			var $content          = $("#content");
+			var $ptr              = $("#ptr");
+
+			$("#submit").click(function() {
+				var itemData = {
+					name:             $name.val(),
+					type:             $type.val(),
+					link:             $link.val(),
+					price:            parseInt($price.val()),
+					duration:         parseInt($duration.val()),
+					startTopic:       $startTopic.val(),
+					endTopic:         $endTopic.val(),
+					anyRequirements:  $anyRequirements.val().split(","),
+					thisRequirements: $thisRequirements.val().split(","),
+					content:          $content.val().split(","),
+					ptr:              parseInt($ptr.val())
+				};
+
+				mainData.push(itemData);
+
+				$name.val("");
+				$type.val("");
+				$link.val("");
+				$price.val("");
+				$duration.val("");
+				$startTopic.val("");
+				$endTopic.val("");
+				$anyRequirements.val("");
+				$thisRequirements.val("");
+				$content.val("");
+				$ptr.val("");
+			});
+
+			$("#convert").click(function() {
+				$("#result").html(JSON.stringify(mainData));
+			});
+		});
+	</script>
+</body>
+</html>
