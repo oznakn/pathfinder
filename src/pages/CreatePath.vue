@@ -3,7 +3,7 @@
 		<h1>Create A Path</h1>
 		<a class="ui button" @click="openWhatDoYouWannaLearnModal">What do you wanna learn?</a>
 
-		<app-timeline v-if="path != undefined" :addDeleteButton="false" pathId="-1" class="timelines" :path="path"></app-timeline>
+		<app-timeline v-if="path != undefined" :expandTimeline="false" pathId="-1" class="timelines" :path="path"></app-timeline>
 	</div>
 </template>
 

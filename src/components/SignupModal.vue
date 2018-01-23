@@ -52,7 +52,7 @@
 								<a class="ui button positive" @click="signup">
 									Sign Up
 								</a>
-								<a class="ui button deny">
+								<a class="ui button deny" @click="closeModal">
 									Back
 								</a>
 							</div>
@@ -77,6 +77,9 @@ export default {
 		};
 	},
 	methods: {
+		closeModal(e) {
+			$(this.$refs.signupModal).modal('hide');
+		},
 		signup(e) {
 			var name = this.$refs.inputName.value;
 			var email = this.$refs.inputEmail.value;

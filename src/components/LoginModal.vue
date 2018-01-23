@@ -43,7 +43,7 @@
 								<a class="ui button positive" @click="login">
 									Log in
 								</a>
-								<a class="ui button deny">
+								<a class="ui button deny" @click="closeModal">
 									Back
 								</a>
 							</div>
@@ -68,6 +68,9 @@ export default {
 		};
 	},
 	methods: {
+		closeModal(e) {
+			$(this.$refs.loginModal).modal('hide');
+		},
 		login(e) {
 			var email = this.$refs.inputEmail.value;
 			var password = this.$refs.inputPassword.value;

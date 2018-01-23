@@ -50,4 +50,13 @@ module.exports = {
 	deletePaths() {
 		window.localStorage.removeItem("paths");
 	},
+	saveProgresses(progresses) {
+		window.localStorage.setItem("progresses", JSON.stringify(progresses));
+	},
+	getProgresses() {
+		if(window.localStorage.getItem("progresses") != undefined) {
+			return JSON.parse(window.localStorage.getItem("progresses"));
+		}
+		return {};
+	}
 }

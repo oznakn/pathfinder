@@ -1,7 +1,14 @@
 <template>
 	<div>
 		<h1>My Paths</h1>
-		<app-timeline :addDeleteButton="true" v-for="(path, index) in paths" :path="path" :key="index" :pathId="index"></app-timeline>
+
+		<div class="ui grid">
+			<div class="ui row equal width">
+				<div class="column" v-for="(path, index) in paths" :key="index">
+					<app-timeline :expandTimeline="true" :path="path"  :pathId="index"></app-timeline>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 

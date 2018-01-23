@@ -1,8 +1,7 @@
 <template>
 	<div class="main">
 		<div v-show="!isLoggedIn" class="main-no-login">
-			<img class="background-image" src="../assets/learning.png"/>
-			<img class="logo-image" src="../assets/logo.png"/>
+			<img class="background-image" src="../assets/notebook.png"/>
 			<div class="overlay"></div>
 			<h1 class="welcome-title">Welcome to {{ appTitle }}</h1>
 			<div class="ui grid">
@@ -118,7 +117,7 @@ h1,h2 {
 
 .main-no-login {
 	position: fixed;
-	top: 10vh;
+	top: 130px;
 	right: 0;
 	left: 0;
 	color: white;
