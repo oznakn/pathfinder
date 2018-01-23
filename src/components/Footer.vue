@@ -16,7 +16,11 @@ export default {
 
 <style scoped lang="scss">
 #footer {
-	margin-top: 50px;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 15px;
 
 	.ui.grid {
 		background: #333;

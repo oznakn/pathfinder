@@ -15,7 +15,8 @@
     "lodash": "^4.17.4",
     "semantic-ui-css": "^2.2.12",
     "vue": "^2.5.11",
-    "vue-lodash": "^1.0.4"
+    "vue-lodash": "^1.0.4",
+    "vue-router": "^3.0.1"
   },
   "browserslist": [
     "> 1%",

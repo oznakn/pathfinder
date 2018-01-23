@@ -1,15 +1,14 @@
 <template>
 	<div id="app" :isLoggedIn="isLoggedIn">
-		<app-menu :isLoggedIn="isLoggedIn"></app-menu>
+		<app-menu :isLoggedIn="isLoggedIn" :selectedMenuItem="selectedMenuItem"></app-menu>
 
 		<app-known-subject-modal></app-known-subject-modal>
 		<app-login-modal></app-login-modal>
 		<app-signup-modal></app-signup-modal>
+		<app-what-do-you-wanna-learn-modal></app-what-do-you-wanna-learn-modal>
 
 		<div id="app-content" class="ui container">
-			<app-create-path v-if="isLoggedIn && currentPath == '/create-path'"></app-create-path>
-			<app-profile     v-else-if="isLoggedIn && currentPath == '/profile'"></app-profile>
-			<div v-else >Ozi</div>
+			<router-view :isLoggedIn="isLoggedIn"></router-view>
 		</div>
 
 		<app-footer></app-footer>
@@ -24,9 +23,7 @@ import Footer from './components/Footer';
 import LoginModal from './components/LoginModal.vue';
 import SignupModal from './components/SignupModal.vue';
 import AddKnownSubjectModal from './components/AddKnownSubjectModal.vue';
-
-import CreatePath from './pages/CreatePath.vue';
-import Profile from './pages/Profile.vue';
+import WhatDouYouWannaLearnModal from './components/WhatDouYouWannaLearnModal.vue';
 
 export default {
 	components: {
@@ -34,17 +31,12 @@ export default {
 		'app-footer': Footer,
 		'app-login-modal': LoginModal,
 		'app-signup-modal': SignupModal,
-		'app-profile': Profile,
-		'app-create-path': CreatePath,
-		'app-known-subject-modal': AddKnownSubjectModal
+		'app-known-subject-modal': AddKnownSubjectModal,
+		'app-what-do-you-wanna-learn-modal': WhatDouYouWannaLearnModal
 	},
 	data () {
 		return {
-			currentPath: window.location.pathname,
-			menus: [
-				{name: 'PathFinder', url: '/'},
-				{name: 'My Paths', url: '/my-paths'},
-			]
+			selectedMenuItem: 0
 		};
 	},
 	computed: {
@@ -53,17 +45,48 @@ export default {
 		}
 	},
 	created() {
+		this.$root.$on("setSelectedMenuItem", (data) => {
+			this.selectedMenuItem = data;
+		});
 
+		if(!this.isLoggedIn) {
+			console.log(this);
+			this.$router.push('/');
+		}
+	},
+	mounted() {
+		if(window.location.pathname == "/my-paths") {
+			this.selectedMenuItem = 1;
+		}
+		else if(window.location.pathname == "/create-path") {
+			this.selectedMenuItem = 2;
+		}
+		else {
+			this.selectedMenuItem = 0;
+		}
 	}
 }
 </script>
 
 <style scoped lang="scss">
 #app {
-	margin-top: 100px;
+	background-color: rgba(230, 230, 230, 0.5);
+	padding-top: 100px;
+	min-height: 100vh;
+	padding-bottom: 100px;
 }
 
 #app-content {
-	min-height: 85vh;
+	min-height: 60vh;
+}
+</style>
+
+<style lang="scss">
+.centered.column {
+	text-align: center;
+}
+
+body {
+	min-height: 100vh;
 }
 </style>
