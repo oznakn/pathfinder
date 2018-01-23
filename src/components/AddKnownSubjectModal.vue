@@ -84,24 +84,25 @@ export default {
 		}
 	},
 	created() {
-		this.getAxios().get("/pf/subjects")
-			.then((response) => {
-				console.log(response);
-
-				if(response != undefined && response.data != undefined && response.data.subjects != undefined) {
-					this.subjects = response.data.subjects;
-
-					for(var subject of this.subjects) {
-						if(this.types.indexOf(subject.type) == -1) {
-							this.types.push(subject.type);
-						}
-					}
-
-					$(this.$refs.addKnownSubjectModal).modal('refresh');
-				}
-			});
 	},
 	mounted() {
+		if(this.isLoggedIn) {
+			this.getAxios().get("/pf/subjects")
+				.then((response) => {
+					if(response != undefined && response.data != undefined && response.data.subjects != undefined) {
+						this.subjects = response.data.subjects;
+
+						for(var subject of this.subjects) {
+							if(this.types.indexOf(subject.type) == -1) {
+								this.types.push(subject.type);
+							}
+						}
+
+						$(this.$refs.addKnownSubjectModal).modal('refresh');
+					}
+				});
+		}
+
 		$(this.$refs.typesDropdown).dropdown({
 			onChange: (a, name, c) => {
 				this.selectedType = name;
@@ -116,7 +117,6 @@ export default {
 
 				var item = this._.find(this.subjects, {name: name});
 
-				console.log(name, item);
 				if(item != undefined) {
 					this.topics = item.topics;
 				}
@@ -136,7 +136,7 @@ export default {
 			$(this.$refs.addKnownSubjectModal)
 				.modal({
 					'onHidden': () => {
-						console.log("Holy shit");
+
 						me.filteredSubjects = [];
 						me.selectedType     = undefined;
 						me.selectedSubject  = undefined;

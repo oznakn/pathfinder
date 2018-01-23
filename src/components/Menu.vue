@@ -2,21 +2,19 @@
 	<div>
 		<div class="ui menu inverted violet borderless fixed top desktop-menu">
 			<div class="ui container">
-				<router-link keydata="0" class="header item" to="/">
+				<router-link class="header item" keydata="0" to="/">
 					<div class="ui image">
 						<img src="../assets/logo.png" />
 					</div>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ appTitle }}
 				</router-link>
+
 				<router-link keydata="1" class="item" v-show="isLoggedIn" to="/my-paths">My Paths</router-link>
 
 				<div class="menu right">
 					<router-link keydata="2" class="item" v-show="isLoggedIn" to="/create-path">Create Path</router-link>
-					<router-link keydata="3" class="item" v-show="isLoggedIn" to="/profile">{{ getName() }}</router-link>
+					<router-link keydata="3" class="item" v-show="isLoggedIn" to="/profile">{{ storage.getName() }}</router-link>
 					<a class="item" v-show="isLoggedIn" @click="logOut">Log out</a>
-
-					<a class="item" v-show="!isLoggedIn" @click="openLoginModal">Log in</a>
-					<a class="item" v-show="!isLoggedIn" @click="openSignupModal">Sign up</a>
 				</div>
 			</div>
 		</div>
@@ -38,25 +36,22 @@
 			<router-link keydata="1" class="item" v-show="isLoggedIn" to="/my-paths">My Paths</router-link>
 
 			<router-link keydata="2" class="item" v-show="isLoggedIn" to="/create-path">Create Path</router-link>
-			<router-link keydata="3" class="item" v-show="isLoggedIn" to="/profile">{{ getName() }}</router-link>
+			<router-link keydata="3" class="item" v-show="isLoggedIn" to="/profile">{{ storage.getName() }}</router-link>
 			<a class="item" v-show="isLoggedIn" @click="logOut">Log out</a>
-
-			<a class="item" v-show="!isLoggedIn" @click="openLoginModal">Log in</a>
-			<a class="item" v-show="!isLoggedIn" @click="openSignupModal">Sign up</a>
 		</div>
 	</div>
 </template>
 
 <script>
 export default {
-	props: ["isLoggedIn", "selectedMenuItem"],
+	props: ["selectedMenuItem"],
 	data () {
 		return {
 		};
 	},
 	methods: {
 		logOut(e) {
-			this.deleteAll();
+			this.storage.deleteAll();
 			this.reloadPage();
 		},
 		openLoginModal(e) {
@@ -96,8 +91,16 @@ export default {
 	}
 }
 
+.align-center {
+	text-align: center;
+}
+
 .image {
 	width: 40px;
+
+	border-radius: 50%;
+	border: 0.7px solid #fff;
+	padding: 4.5px;
 }
 
 </style>

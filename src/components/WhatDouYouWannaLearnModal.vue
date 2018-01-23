@@ -34,8 +34,8 @@
 			</div>
 		</div>
 		<div class="actions">
-			<a class="ui button positive" @click="addKnownSubject">
-				Save
+			<a class="ui button positive" @click="createPath">
+				Generate
 			</a>
 			<a class="ui button deny">
 				Back
@@ -61,14 +61,14 @@ export default {
 		};
 	},
 	methods: {
-		addKnownSubject() {
+		createPath() {
 			for(var i = 0; i < this.topics.length; i++) {
 				if($(this.$refs.checkboxes[i]).find("input")[0].checked) {
 					this.selectedTopics.push(this.topics[i]);
 				}
 			}
 
-			this.$root.$emit("addKnownSubject", {
+			this.$root.$emit("createPath", {
 				type: this.selectedType,
 				subject: this.selectedSubject,
 				topics: this.selectedTopics
@@ -83,25 +83,26 @@ export default {
 			});
 		}
 	},
-	created() {
-		this.getAxios().get("/pf/subjects")
-			.then((response) => {
-				console.log(response);
-
-				if(response != undefined && response.data != undefined && response.data.subjects != undefined) {
-					this.subjects = response.data.subjects;
-
-					for(var subject of this.subjects) {
-						if(this.types.indexOf(subject.type) == -1) {
-							this.types.push(subject.type);
-						}
-					}
-
-					$(this.$refs.whatDoYouWannaLearnModal).modal('refresh');
-				}
-			});
-	},
 	mounted() {
+		if(this.isLoggedIn) {
+			this.getAxios().get("/pf/subjects")
+				.then((response) => {
+					console.log(response);
+
+					if(response != undefined && response.data != undefined && response.data.subjects != undefined) {
+						this.subjects = response.data.subjects;
+
+						for(var subject of this.subjects) {
+							if(this.types.indexOf(subject.type) == -1) {
+								this.types.push(subject.type);
+							}
+						}
+
+						$(this.$refs.whatDoYouWannaLearnModal).modal('refresh');
+					}
+				});
+		}
+
 		$(this.$refs.typesDropdown).dropdown({
 			onChange: (a, name, c) => {
 				this.selectedType = name;
@@ -110,24 +111,40 @@ export default {
 			}
 		});
 
+		var knowledge = this.storage.getKnowledge();
+
 		$(this.$refs.subjectsDropdown).dropdown({
 			onChange: (a, name, c) => {
 				this.selectedSubject = name;
-
 				var item = this._.find(this.subjects, {name: name});
 
-				console.log(name, item);
 				if(item != undefined) {
-					this.topics = item.topics;
+					var newKnowledge = this._.filter(knowledge, {subject: this.selectedSubject});
+					if(newKnowledge.length > 0) {
+						newKnowledge = newKnowledge[0].topics;
+					}
+					else {
+						newKnowledge = [];
+					}
+
+					var newTopics = [];
+
+					for(var topic of item.topics) {
+						if(newKnowledge.indexOf(topic) == -1) {
+							newTopics.push(topic);
+						}
+					}
+
+					this.topics = newTopics;
+
+					setTimeout(() => {
+						this.$refs.checkboxes.forEach((item) => {
+							$(item).checkbox('check');
+						});
+
+						$(this.$refs.whatDoYouWannaLearnModal).modal('refresh');
+					}, 100);
 				}
-
-				setTimeout(() => {
-					this.$refs.checkboxes.forEach((item) => {
-						$(item).checkbox('check');
-					});
-
-					$(this.$refs.whatDoYouWannaLearnModal).modal('refresh');
-				}, 100);
 			}
 		});
 
@@ -136,7 +153,7 @@ export default {
 			$(this.$refs.whatDoYouWannaLearnModal)
 				.modal({
 					'onHidden': () => {
-						console.log("Holy shit");
+
 						me.filteredSubjects = [];
 						me.selectedType     = undefined;
 						me.selectedSubject  = undefined;

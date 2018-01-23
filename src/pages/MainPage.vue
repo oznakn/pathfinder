@@ -1,6 +1,9 @@
 <template>
 	<div class="main">
-		<div v-show="!isLoggedIn">
+		<div v-show="!isLoggedIn" class="main-no-login">
+			<img class="background-image" src="../assets/learning.png"/>
+			<img class="logo-image" src="../assets/logo.png"/>
+			<div class="overlay"></div>
 			<h1 class="welcome-title">Welcome to {{ appTitle }}</h1>
 			<div class="ui grid">
 				<div class="ui row">
@@ -10,9 +13,11 @@
 					</div>
 				</div>
 			</div>
+
+			<h5 class="taken-by">Photos taken from <a href="https://www.pexels.com/" target="_blank">Pexels</a>, under CC0 license</h5>
 		</div>
 		<div v-show="isLoggedIn">
-			<h1>Welcome back, {{ this.getName() }}</h1>
+			<h1>Welcome back, {{ storage.getName() }}</h1>
 			<h2>{{ this.title }}</h2>
 			<table class="ui unstackable celled table">
 				<thead>
@@ -55,7 +60,6 @@
 
 <script>
 export default {
-	props: ["isLoggedIn"],
 	data() {
 		return {
 			selectedType: 0,
@@ -86,11 +90,17 @@ export default {
 		}
 	},
 	mounted() {
-		for(var path of this.paths) {
-			if(this.types.indexOf(path.type) == -1) {
-				this.types.push(path.type);
+		if(this.isLoggedIn) {
+			for(var path of this.paths) {
+				if(this.types.indexOf(path.type) == -1) {
+					this.types.push(path.type);
+				}
 			}
 		}
+
+		setTimeout(() => {
+			$(".background-image").addClass("no-blur");
+		}, 250);
 	}
 }
 </script>
@@ -106,12 +116,69 @@ h1,h2 {
 	text-align: center;
 }
 
-.main {
-	margin-top: 60px;
+.main-no-login {
+	position: fixed;
+	top: 10vh;
+	right: 0;
+	left: 0;
+	color: white;
 }
 
 a.massive.button {
 	margin-bottom: 20px;
+}
+
+.background-image {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+
+	width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+	z-index: -40;
+
+	filter: blur(25px);
+
+	transition: 1200ms all ease-in-out;
+
+	&.no-blur {
+		filter: blur(0px);
+	}
+}
+
+.logo-image {
+	position: fixed;
+	left: 50%;
+	right: 0;
+
+	bottom: 10vh;
+
+	min-width: 30px;
+	max-width: 120px;
+	width: 25vw;
+
+	transform: translateX(-50%);
+	z-index: -37;
+}
+
+.overlay {
+	background-color: rgba(0,0,0,0.3);
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: -35;
+}
+
+.taken-by {
+	position: fixed;
+	right: 10px;
+	bottom: 50px;
 }
 
 @media screen and (max-width: 767px) {
@@ -120,5 +187,3 @@ a.massive.button {
 	}
 }
 </style>
-
-

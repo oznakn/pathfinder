@@ -31,7 +31,9 @@
 						</div>
 						<div class="ui row" v-show="showLoader">
 							<div class="ui eight wide computer sixteen wide mobile centered column">
-								<div class="ui loader"></div>
+								<div class="ui inverted active dimmer">
+									<div class="ui inverted loader"></div>
+								</div>
 							</div>
 						</div>
 						<div class="ui row" v-show="signupDone || signupError">
@@ -82,10 +84,11 @@ export default {
 
 			if(name != "" && email != "" && password != "") {
 				this.showLoader = true;
+				$(this.$refs.signupModal).modal('refresh');
+
 				this.getAxios().post("/users/register",
 					{name: name, email: email, password: password})
 					.then((response) => {
-						console.log(response);
 
 						if(response != undefined) {
 							this.signupDone = true;
@@ -122,6 +125,23 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.dimmer.active {
+	padding: 10px 0;
+	margin: 10px 0;
+}
+
+@media screen and (max-width: 767px) {
+	.ui.modal {
+		.ui.container {
+			margin: 0 !important;
+		}
+
+		.ui.centered.column {
+			margin: 0px !important;
+			padding: 10px !important;
+		}
+	}
+}
 </style>
 
 

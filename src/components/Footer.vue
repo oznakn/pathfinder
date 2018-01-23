@@ -20,10 +20,10 @@ export default {
 	bottom: 0;
 	left: 0;
 	right: 0;
-	padding: 15px;
+	padding: 7px;
 
 	.ui.grid {
-		background: #333;
+		background: #111;
 		color: white;
 	}
 

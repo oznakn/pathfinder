@@ -1,14 +1,15 @@
 <template>
-	<div id="app" :isLoggedIn="isLoggedIn">
-		<app-menu :isLoggedIn="isLoggedIn" :selectedMenuItem="selectedMenuItem"></app-menu>
+	<div id="app">
+		<app-menu :selectedMenuItem="selectedMenuItem"></app-menu>
 
-		<app-known-subject-modal></app-known-subject-modal>
+		<app-known-subject-modal v-if="isLoggedIn"></app-known-subject-modal>
+		<app-what-do-you-wanna-learn-modal v-if="isLoggedIn"></app-what-do-you-wanna-learn-modal>
+
 		<app-login-modal></app-login-modal>
 		<app-signup-modal></app-signup-modal>
-		<app-what-do-you-wanna-learn-modal></app-what-do-you-wanna-learn-modal>
 
 		<div id="app-content" class="ui container">
-			<router-view :isLoggedIn="isLoggedIn"></router-view>
+			<router-view></router-view>
 		</div>
 
 		<app-footer></app-footer>
@@ -39,18 +40,12 @@ export default {
 			selectedMenuItem: 0
 		};
 	},
-	computed: {
-		isLoggedIn() {
-			return this.getIsLoggedIn();
-		}
-	},
 	created() {
 		this.$root.$on("setSelectedMenuItem", (data) => {
 			this.selectedMenuItem = data;
 		});
 
 		if(!this.isLoggedIn) {
-			console.log(this);
 			this.$router.push('/');
 		}
 	},

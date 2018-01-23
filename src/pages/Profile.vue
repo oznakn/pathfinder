@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1 class="name-title">{{ getName() }}</h1>
+		<h1 class="name-title">{{ storage.getName() }}</h1>
 		<br>
 		<h1>Edit Your Knowledge</h1>
 		<a class="ui button" @click="openAddKnownSubjectModal">Add Known Subject</a>
@@ -32,7 +32,7 @@ export default {
 			this.saveKnowledgeToDB();
 		},
 		saveKnowledgeToDB() {
-			this.saveKnowledge(JSON.stringify(this.knownSubjects));
+			this.storage.saveKnowledge(this.knownSubjects);
 		},
 		getTopicsString(item) {
 			var result = item.topics.join(' , ');
@@ -45,7 +45,7 @@ export default {
 		}
 	},
 	created() {
-		this.knownSubjects = this.getKnowledge();
+		this.knownSubjects = this.storage.getKnowledge();
 	},
 	mounted() {
 		this.$root.$on("addKnownSubject", (data) => {

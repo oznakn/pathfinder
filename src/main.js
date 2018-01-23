@@ -9,6 +9,7 @@ import vueLodash from 'vue-lodash';
 import App from './App.vue';
 import constants from './constants';
 import routes from './routes';
+import storage from './storage';
 
 Vue.use(vueLodash, lodash);
 Vue.use(VueRouter);
@@ -16,15 +17,21 @@ Vue.use(VueRouter);
 Vue.mixin({
 	data() {
 		return {
-			appTitle: 'Pathpal'
+			appTitle: 'PathFinder',
+			storage: storage
 		};
+	},
+	computed: {
+		isLoggedIn() {
+			return this.storage.getIsLoggedIn();
+		}
 	},
 	methods: {
 		getAxios() {
-			if(this.getIsLoggedIn()) {
+			if(this.storage.getIsLoggedIn()) {
 				return axios.create({
 					baseURL: constants.SERVER,
-					headers: {'Authorization': this.getJwtToken()}
+					headers: {'Authorization': this.storage.getJwtToken()}
 				});
 			}
 			else {
@@ -33,47 +40,8 @@ Vue.mixin({
 				});
 			}
 		},
-		getName() {
-			if(window.localStorage.getItem("name") != undefined) {
-				return window.localStorage.getItem("name");
-			}
-			return "";
-		},
 		reloadPage() {
 			window.location.reload();
-		},
-		getJwtToken() {
-			if(window.localStorage.getItem("token") != undefined) {
-				return window.localStorage.getItem("token");
-			}
-			return false;
-		},
-		saveName(name) {
-			window.localStorage.setItem("name", name);
-		},
-		getKnowledge() {
-			if(window.localStorage.getItem("knowledge") != undefined) {
-				return JSON.parse(window.localStorage.getItem("knowledge"));
-			}
-			return [];
-		},
-		saveKnowledge(knowledge) {
-			window.localStorage.setItem("knowledge", knowledge);
-		},
-		deleteKnowledge() {
-			window.localStorage.removeItem("knowledge");
-		},
-		deleteJwtToken() {
-			window.localStorage.removeItem("token");
-		},
-		saveJwtToken(token) {
-			window.localStorage.setItem("token", token);
-		},
-		getIsLoggedIn() {
-			return window.localStorage.getItem("token") != undefined;
-		},
-		deleteAll() {
-			window.localStorage.clear();
 		},
 		getMonthString(number) {
 			switch(number) {

@@ -1,11 +1,18 @@
 <template>
-	<div class="timeline">
-		<div class="timeline-bar"></div>
+	<div>
+		<div class="timeline" v-if="path != undefined">
+			<h3 v-if="path.length > 0">{{ path[0].subject.name }}</h3>
+			<i v-if="addDeleteButton" class="icon close" @click="deletePath()" />
 
-		<div class="timeline-items">
-			<div class="timeline-item" v-for="(item, index) in timelineItems" :key="index">
-				<i></i>
-				<a :href="item.url" target="_blank">{{ item.name }}</a>
+			<div>
+				<div class="timeline-bar"></div>
+
+				<div class="timeline-items">
+					<div class="timeline-item" v-for="(item, index2) in path" :key="index2">
+						<i></i>
+						<a :href="item.link" target="_blank">{{ item.name }}</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -13,23 +20,47 @@
 
 <script>
 export default {
-	props: ['timelineItems'],
+	props: ['path', 'addDeleteButton', 'pathId'],
 	data() {
 		return {
 
 		};
 	},
-	methods() {
+	methods: {
+		deletePath() {
+			var paths = this.storage.getPaths();
 
+			paths.splice(this.pathId, 1);
+
+			this.path = undefined;
+
+			this.storage.savePaths(paths);
+		}
+	},
+	mounted() {
+		console.log(this.paths);
 	}
 }
 </script>
 
 <style scoped lang="scss">
+.icon.close {
+	&:hover {
+		transform: scale(1.3);
+	}
+}
 .timeline {
 	min-height: 30px;
 	position: relative;
 	left: 40px;
+
+	& > h3 {
+		display: inline-block;
+		margin-right: 5px;
+	}
+	& > div {
+		position: relative;
+	}
 
 	.timeline-bar {
 		width: 3px;

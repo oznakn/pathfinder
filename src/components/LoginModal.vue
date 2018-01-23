@@ -33,7 +33,9 @@
 						</div>
 						<div class="ui row" v-show="showLoader">
 							<div class="ui eight wide computer sixteen wide mobile centered column">
-								<div class="ui loader"></div>
+								<div class="ui inverted dimmer active">
+									<div class="ui inverted loader"></div>
+								</div>
 							</div>
 						</div>
 						<div class="ui row">
@@ -72,13 +74,15 @@ export default {
 
 			if(email != "" && password != "") {
 				this.showLoader = true;
+				$(this.$refs.loginModal).modal('refresh');
+
 				this.getAxios().post("/auth/local",
 					{email: email, password: password})
 					.then((response) => {
 						console.log(response);
 
 						if(response.data != undefined) {
-							this.saveJwtToken(response.data.token);
+							this.storage.saveJwtToken(response.data.token);
 
 							return true;
 						}
@@ -91,7 +95,7 @@ export default {
 									console.log(response);
 
 									if(response.data != undefined && response.data.user != undefined) {
-										this.saveName(response.data.user.name);
+										this.storage.saveName(response.data.user.name);
 										this.loginDone = true;
 
 										setTimeout(() => {
@@ -121,7 +125,6 @@ export default {
 	},
 	mounted() {
 		this.$root.$on('openLoginModal', (data) => {
-			console.log('openLoginModal');
 			$(this.$refs.loginModal).modal('show');
 		});
 	}
@@ -129,6 +132,22 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.dimmer.active {
+	padding: 10px 0;
+}
+
+@media screen and (max-width: 767px) {
+	.ui.modal {
+		.ui.container {
+			margin: 0 !important;
+		}
+
+		.ui.centered.column {
+			margin: 0px !important;
+			padding: 10px !important;
+		}
+	}
+}
 </style>
 
 
