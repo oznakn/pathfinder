@@ -82,8 +82,6 @@ export default {
 				this.getAxios().post("/auth/local",
 					{email: email, password: password})
 					.then((response) => {
-						console.log(response);
-
 						if(response.data != undefined) {
 							this.storage.saveJwtToken(response.data.token);
 
@@ -95,8 +93,6 @@ export default {
 						if(move) {
 							return this.getAxios().get("/users/profile")
 								.then((response) => {
-									console.log(response);
-
 									if(response.data != undefined && response.data.user != undefined) {
 										this.storage.saveName(response.data.user.name);
 										this.loginDone = true;

@@ -2,6 +2,7 @@
 	<div>
 		<div class="timeline" v-if="path != undefined">
 			<h3 v-if="path.length > 0">{{ path[0].subject.name }}</h3>
+			<span><i class="icon dollar"></i>{{ totalPrice }}</span>
 			<i v-if="expandTimeline" class="icon close" @click="deletePath()" />
 
 			<div>
@@ -18,8 +19,10 @@
 
 						{{ item.duration }}
 
-						<span v-if="item.type == 'Book'"> Sayfa</span>
-						<span v-else> Saat</span>
+						<span v-if="item.type == 'Book'"> Pages</span>
+						<span v-else> Hours</span>
+
+						<div class="ui star rating" data-rating="5"></div>
 
 						<i class="icon angle down" v-if="expandTimeline" @click="showCheckboxes = !showCheckboxes"></i>
 
@@ -53,6 +56,17 @@ export default {
 	},
 	created() {
 		this.progresses = this.storage.getProgresses();
+	},
+	computed: {
+		totalPrice() {
+			var c = 0;
+
+			for(var item of this.path) {
+				c += item.price;
+			}
+
+			return c;
+		}
 	},
 	methods: {
 		registerProgressBar(bar) {
@@ -116,8 +130,6 @@ export default {
 		}
 	},
 	mounted() {
-		console.log(this.paths);
-
 		var me = this;
 
 		$(".timeline-checkbox").each(function() {
@@ -137,6 +149,12 @@ export default {
 			$(this).progress("set progress", parseInt($(this).attr("data-value")));
 			$(this).removeAttr("data-value");
 		});
+
+		$('.rating')
+			.rating({
+				initialRating: 3,
+				maxRating: 5
+			});
 	}
 }
 </script>
@@ -206,6 +224,10 @@ i.icon.angle.down {
 
 .ui.progress {
 	margin: 10px 0;
+}
+
+.icon.dollar {
+	margin: 0;
 }
 
 </style>

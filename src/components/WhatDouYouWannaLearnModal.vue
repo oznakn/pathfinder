@@ -87,8 +87,6 @@ export default {
 		if(this.isLoggedIn) {
 			this.getAxios().get("/pf/subjects")
 				.then((response) => {
-					console.log(response);
-
 					if(response != undefined && response.data != undefined && response.data.subjects != undefined) {
 						this.subjects = response.data.subjects;
 

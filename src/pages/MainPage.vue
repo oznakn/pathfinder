@@ -1,6 +1,6 @@
 <template>
 	<div class="main">
-		<div v-show="!isLoggedIn" class="main-no-login">
+		<div v-if="!isLoggedIn" class="main-no-login">
 			<img class="background-image" src="../assets/notebook.png"/>
 			<div class="overlay"></div>
 			<h1 class="welcome-title">Welcome to {{ appTitle }}</h1>
@@ -15,61 +15,20 @@
 
 			<h5 class="taken-by">Photos taken from <a href="https://www.pexels.com/" target="_blank">Pexels</a>, under CC0 license</h5>
 		</div>
-		<div v-show="isLoggedIn">
-			<h1>Welcome back, {{ storage.getName() }}</h1>
-			<h2>{{ this.title }}</h2>
-			<table class="ui unstackable celled table">
-				<thead>
-					<tr>
-						<th>{{ getMonthString(new Date().getDay()) }}</th>
-						<th>{{ getMonthString(new Date().getDay() + 1) }}</th>
-						<th>{{ getMonthString(new Date().getDay() + 2) }}</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>First</td>
-						<td>Cell</td>
-						<td>Cell</td>
-					</tr>
-					<tr>
-						<td>Cell</td>
-						<td>Cell</td>
-						<td>Cell</td>
-					</tr>
-					<tr>
-						<td>Cell</td>
-						<td>Cell</td>
-						<td>Cell</td>
-					</tr>
-				</tbody>
-				<tfoot>
-					<tr>
-						<th colspan="3">
-							<div class="ui right floated pagination menu">
-								<a @click="selectType(index)" :class="{item: true, active: selectedType == index}" v-for="(item, index) in types" :key="index">{{ item }}</a>
-							</div>
-						</th>
-					</tr>
-				</tfoot>
-			</table>
-		</div>
+		<app-calendar v-else></app-calendar>
 	</div>
 </template>
 
 <script>
+import Calendar from '../components/Calendar';
+
 export default {
+	components: {
+		'app-calendar': Calendar
+	},
 	data() {
 		return {
-			selectedType: 0,
-			paths: [
-				{type: "C++"},
-				{type: "Python"},
-				{type: "Java"},
-				{type: "C++"},
-				{type: "Arduino"},
-			],
-			types: []
+
 		};
 	},
 	methods: {
@@ -78,25 +37,9 @@ export default {
 		},
 		openSignupModal(e) {
 			this.$root.$emit("openSignupModal", true);
-		},
-		selectType(type) {
-			this.selectedType = type;
-		}
-	},
-	computed: {
-		title() {
-			return this.types[this.selectedType] || "";
 		}
 	},
 	mounted() {
-		if(this.isLoggedIn) {
-			for(var path of this.paths) {
-				if(this.types.indexOf(path.type) == -1) {
-					this.types.push(path.type);
-				}
-			}
-		}
-
 		setTimeout(() => {
 			$(".background-image").addClass("no-blur");
 		}, 250);

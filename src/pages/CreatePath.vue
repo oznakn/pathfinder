@@ -3,6 +3,17 @@
 		<h1>Create A Path</h1>
 		<a class="ui button" @click="openWhatDoYouWannaLearnModal">What do you wanna learn?</a>
 
+		<div class="ui selection dropdown" ref="preferDropdown">
+			<input type="hidden" name="country">
+			<i class="dropdown icon"></i>
+			<div class="default text">What would you prefer</div>
+			<div class="menu">
+				<div class="item"><i class="icon book" ></i>Book</div>
+				<div class="item"><i class="icon file text"></i>Lesson</div>
+				<div class="item"><i class="icon video play"></i>Video</div>
+			</div>
+		</div>
+
 		<app-timeline v-if="path != undefined" :expandTimeline="false" pathId="-1" class="timelines" :path="path"></app-timeline>
 	</div>
 </template>
@@ -67,6 +78,8 @@ export default {
 
 			});
 		});
+
+		$(this.$refs.preferDropdown).dropdown();
 	}
 }
 </script>
