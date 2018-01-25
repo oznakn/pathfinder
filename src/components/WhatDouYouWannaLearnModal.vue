@@ -109,10 +109,10 @@ export default {
 			}
 		});
 
-		var knowledge = this.storage.getKnowledge();
-
 		$(this.$refs.subjectsDropdown).dropdown({
 			onChange: (a, name, c) => {
+				var knowledge = this.storage.getKnowledge();
+
 				this.selectedSubject = name;
 				var item = this._.find(this.subjects, {name: name});
 
@@ -124,7 +124,7 @@ export default {
 					else {
 						newKnowledge = [];
 					}
-
+					console.log(newKnowledge);
 					var newTopics = [];
 
 					for(var topic of item.topics) {

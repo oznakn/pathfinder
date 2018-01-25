@@ -13,8 +13,12 @@
 				<div class="item"><i class="icon video play"></i>Video</div>
 			</div>
 		</div>
+		<div class="ui checkbox one-fit-all-checkbox">
+			<input type="checkbox">
+			<label>Pick just one resource</label>
+		</div>
 
-		<app-timeline v-if="path != undefined" :expandTimeline="false" pathId="-1" class="timelines" :path="path"></app-timeline>
+		<app-timeline v-for="(path, index) in paths" :key="index" :expandTimeline="false" pathId="-1" class="timelines" :path="path"></app-timeline>
 	</div>
 </template>
 
@@ -27,7 +31,7 @@ export default {
 	},
 	data() {
 		return {
-			path: undefined
+			paths: []
 		};
 	},
 	methods: {
@@ -37,12 +41,18 @@ export default {
 	},
 	mounted() {
 		this.$root.$on('createPath', (data) => {
+			var checked = $('.one-fit-all-checkbox').checkbox('is checked');
+			var prefer = $(this.$refs.preferDropdown).dropdown("get value") || "Lesson";
+			console.log(prefer);
+
 			this.getAxios().post("/pf", {
 				request: {
 					subject: data.subject,
 					start_topic: data.topics[0],
 					end_topic: data.topics[data.topics.length - 1],
-					known_topics: []
+					known_topics: [],
+					one_fits_all: checked,
+					pref_type: prefer
 				}
 			})
 			.then((response) => {
@@ -67,11 +77,13 @@ export default {
 				}
 
 				if(canMove) {
+					path[0].contents = data.topics;
+
 					paths.push(path);
 
 					this.storage.savePaths(paths);
 
-					this.path = path;
+					this.paths = [path];
 				}
 			})
 			.catch(() => {

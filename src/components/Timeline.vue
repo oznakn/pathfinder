@@ -27,13 +27,13 @@
 						<i class="icon angle down" v-if="expandTimeline" @click="showCheckboxes = !showCheckboxes"></i>
 
 						<div v-if="expandTimeline" v-show="showCheckboxes">
-							<div class="ui violet small indicating progress" :data-value="getProgressValueFromData(item._id)" :data-total="item.contents.length" :item-id="item._id" >
+							<div class="ui violet small indicating progress" :data-value="getProgressValueFromData(item.name)" :data-total="item.contents.length" :item-id="item.name" >
 								<div class="bar">
 									<div class="progress"></div>
 								</div>
 							</div>
 
-							<div class="ui checkbox timeline-checkbox" :mustChecked="getCheckboxValueFromData(item._id, index3)" v-for="(content, index3) in item.contents" :key="index3" :item-id="item._id">
+							<div class="ui checkbox timeline-checkbox" :mustChecked="getCheckboxValueFromData(item.name, index3)" v-for="(content, index3) in item.contents" :key="index3" :item-id="item.name">
 								<input type="checkbox" :name="content" >
 								<label>{{ content }}</label>
 							</div>

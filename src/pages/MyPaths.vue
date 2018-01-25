@@ -30,9 +30,11 @@ export default {
 	methods: {
 		deletePath(pathIndex) {
 			this.paths.splice(pathIndex, 1);
+			this.storage.savePaths(this.paths);
 		}
 	},
 	mounted() {
+		this.paths = this.storage.getPaths();
 	}
 }
 </script>

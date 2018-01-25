@@ -1,1 +1,1 @@
-module.exports.SERVER = 'https://serene-forest-51650.herokuapp.com/';
+module.exports.SERVER = 'https://whispering-eyrie-41458.herokuapp.com';
